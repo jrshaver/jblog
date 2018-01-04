@@ -1,0 +1,33 @@
+body {
+    font-family: sans-serif;
+    text-align:center;
+}
+
+nav a {
+    margin:20px;
+}
+
+#addCheese {
+    display:table;
+    width:100%;
+    text-align:center;
+}
+
+input, textarea, form {
+    display:block;
+    margin:10px auto;
+}
+
+textarea {
+    height:50px;
+    width:300px;
+}
+
+ul {
+    list-style-position: inside;
+    text-align:left;
+}
+
+li, form {
+    display:block;
+}

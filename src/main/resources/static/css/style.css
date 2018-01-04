@@ -1,0 +1,42 @@
+.error {
+    color:red;
+    font-weight: bold;
+}
+
+body {
+    padding-top: 70px;
+}
+
+.post a {
+    color: #000000;
+
+}
+
+.users {
+    margin: 30px auto;
+    border: 1px solid #e4e4e4;
+    width: 100%;
+}
+
+.users th, .users td {
+    text-align:center;
+    padding: 15px;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+.user-info th, .user-info td {
+    padding: 15px;
+    vertical-align: top;
+}
+
+.user-info ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+textarea {
+    padding: 5px;
+    width: 50%;
+    height: 100px;
+}

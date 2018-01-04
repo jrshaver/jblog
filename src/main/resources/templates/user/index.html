@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments::head"></head>
+<body>
+
+    <nav th:replace="fragments::nav"></nav>
+
+    <div class="container">
+
+        <h1 th:text="${title}"></h1>
+        <hr />
+
+        <table th:if="${users} and ${users.size()}" class="users">
+            <tr>
+                <th>Username</th>
+                <th>Number of Posts</th>
+                <th>Date Joined</th>
+            </tr>
+            <tr th:each="user : ${users}">
+                <td><a th:href="@{'/user/' + ${user.getUserId()}}" th:text="${user.getUsername()}"></a></td>
+                <td>Get Number of Posts</td>
+                <td th:text="${user.getDateJoined()}"></td>
+            </tr>
+        </table>
+
+        <p th:unless="${users} and ${users.size()}">No users yet!</p>
+
+    </div>
+
+</body>
+</html>

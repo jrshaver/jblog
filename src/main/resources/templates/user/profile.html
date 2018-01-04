@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments::head"></head>
+<body>
+
+<nav th:replace="fragments::nav"></nav>
+
+<div class="container">
+
+    <h1 th:text="${title}"></h1>
+    <hr />
+
+    <div class="container">
+
+        <table class="user-info">
+            <tr>
+                <th>Username:</th>
+                <td th:text="${user.getUsername()}"></td>
+            </tr>
+            <tr>
+                <th>Email:</th>
+                <td th:text="${user.getEmail()}"></td>
+            </tr>
+            <tr>
+                <th>Date Joined:</th>
+                <td th:text="${user.getDateJoined()}"></td>
+            </tr>
+            <tr>
+                <th>Posts:</th>
+                <td>
+                    <ul>
+                        <li>post name:link to post</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
+</body>
+</html>

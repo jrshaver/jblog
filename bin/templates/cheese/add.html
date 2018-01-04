@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments::head"></head>
+<body>
+
+    <h1 th:text="${title}"></h1>
+
+    <nav th:replace="fragments::nav"></nav>
+
+    <form method="POST" id="addCheese">
+        <input type="text" name="cheeseName" placeholder="Cheese name" />
+        <textarea name="description" placeholder="Describe your post"></textarea>
+        <input type="submit" value="Add Cheese" />
+    </form>
+
+    <p th:text="${error}"></p>
+
+</body>
+</html>

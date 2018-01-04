@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments::head"></head>
+<body>
+
+
+<nav th:replace="fragments::nav"></nav>
+
+<div class="container">
+
+    <div class="post">
+        <h1 th:text="${post.getTitle()}">Blog Post Title</h1>
+        <p class="lead">by <a href="">Author</a></p>
+        <p th:text="${post.getBody()}"></p>
+        <hr />
+        <ul th:each="tag : ${post.getTags()}">
+            <li th:text="${tag.getName()}"></li>
+        </ul>
+        <p th:text="'Posted on ' + ${post.getDatePosted()}"></p>
+    </div>
+
+</div>
+
+</body>
+</html>
