@@ -1,21 +1,16 @@
 package org.launchcode.jblog;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 
 @Configuration
-@EnableAutoConfiguration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -24,30 +19,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+                .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/**", "/index", "/user", "/tags", "/user/register",
-                        "/resources/**", "/static/**", "/css/**", "/js/**", "/images/**").permitAll()
+                    .antMatchers("/", "/user","/user/**","/tags","/css/**","/js/**").permitAll()
                     .anyRequest().authenticated()
-                .and()
+                    .and()
                 .formLogin()
                     .loginPage("/user/login")
-                    .permitAll()
-                .and()
-                .logout()
+                    .usernameParameter("username")
+                    .passwordParameter("password")
+                    .defaultSuccessUrl("/")
+                    .loginProcessingUrl("/user/login")
+                    .failureUrl("/user/login?error=error")
                     .permitAll();
+
     }
 
     @Autowired
-    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(dataSource)
-                .passwordEncoder(passwordEncoder())
-                .usersByUsernameQuery("select username,password, enabled from users where username=?")
-                .authoritiesByUsernameQuery("select username, role from users_roles where username=?");
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public void configureAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+        auth.jdbcAuthentication()
+                .dataSource(dataSource)
+                .passwordEncoder(new BCryptPasswordEncoder())
+                .usersByUsernameQuery("select username, password, true from users where username=?")
+                .authoritiesByUsernameQuery("select u.username, r.name from users u, roles r, user_roles ur where u.id=ur.user_id and r.id=ur.role_id and u.username=?");
     }
 }

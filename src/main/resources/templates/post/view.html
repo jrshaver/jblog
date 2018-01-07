@@ -10,10 +10,10 @@
 
     <div class="post">
         <h1 th:text="${post.getTitle()}">Blog Post Title</h1>
-        <p class="lead">by <a href="">Author</a></p>
+        <p class="lead">by <a th:href="@{'/user/' + ${post.getUser().getUsername()}}" th:text="${post.getUser().getUsername()}">Author</a></p>
         <p th:text="${post.getBody()}"></p>
         <hr />
-        <ul th:each="tag : ${post.getTags()}">
+        <ul class="tag-list" th:each="tag : ${post.getTags()}">
             <li th:text="${tag.getName()}"></li>
         </ul>
         <p th:text="'Posted on ' + ${post.getDatePosted()}"></p>

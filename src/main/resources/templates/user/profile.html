@@ -28,8 +28,8 @@
             <tr>
                 <th>Posts:</th>
                 <td>
-                    <ul>
-                        <li>post name:link to post</li>
+                    <ul th:each="post : ${user.getPosts()}">
+                        <li><a th:href="@{'/' + ${post.getId()}}" th:text="${post.getTitle()}"></a></li>
                     </ul>
                 </td>
             </tr>

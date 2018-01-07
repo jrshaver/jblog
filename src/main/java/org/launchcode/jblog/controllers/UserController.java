@@ -1,22 +1,45 @@
 package org.launchcode.jblog.controllers;
 
+import org.launchcode.jblog.WebSecurityConfig;
+import org.launchcode.jblog.models.Role;
 import org.launchcode.jblog.models.User;
 import org.launchcode.jblog.dao.UserDao;
 import org.launchcode.jblog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.jaas.SecurityContextLoginModule;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import javax.security.auth.login.LoginException;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("user")
@@ -34,10 +57,10 @@ public class UserController {
         return "user/index";
     }
 
-    @RequestMapping(value = "/{userId}")
-    public String userProfile(Model model, @PathVariable int userId) {
+    @RequestMapping(value = "{username}")
+    public String userProfile(Model model, @PathVariable String username) {
         //display a users profile with user info and posts
-        User user = userService.findById(userId);
+        User user = userService.findByUsername(username);
         model.addAttribute("title", user.getUsername());
         model.addAttribute("user", user);
         return "user/profile";
@@ -52,29 +75,41 @@ public class UserController {
         return "user/add";
     }
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public String signUpProcess(Model model, @ModelAttribute @Valid User newUser, Errors errors) {
 
+        //if validation fails
         if (errors.hasErrors()) {
             model.addAttribute("title", "Sign up");
             model.addAttribute(newUser);
             return "user/add";
         }
 
-        else {
-            newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-            newUser.setDateJoined(new Date());
-            userService.addUser(newUser);
-
-            //Start session
-            model.addAttribute("title", "Jblog");
-            return "redirect:/";
+        //if username exists in db
+        if (userService.findByUsername(newUser.getUsername()) != null) {
+            model.addAttribute("title", "Sign up");
+            model.addAttribute(newUser);
+            model.addAttribute("usernameExistsError", "Username already exists!");
+            return "user/add";
         }
 
+        //if email exists in db
+        if (userService.findByEmail(newUser.getEmail()) != null) {
+            model.addAttribute("title", "Sign up");
+            model.addAttribute(newUser);
+            model.addAttribute("emailExistsError", "Email already exists!");
+            return "user/add";
+        }
+
+        //add user
+        userService.addUser(newUser);
+
+        //log user in
+
+        return "forward:/user/login";
+
     }
+
 
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public String signInDisplay(Model model) {
@@ -85,21 +120,13 @@ public class UserController {
         return "user/login";
     }
 
-    @RequestMapping(value = "login", method = RequestMethod.POST)
-    public String signInProcess(@RequestParam String username, @RequestParam String password) {
-
-
-
-        return "redirect:/";
-    }
-
-    @RequestMapping(value="/logout", method = RequestMethod.GET)
+    @RequestMapping(value="logout", method = RequestMethod.GET)
     public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/login?logout";
+        return "redirect:/";
     }
 
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:fragment="head">
     <meta charset="UTF-8"/>
     <title th:text="${title}">Title</title>
@@ -12,7 +12,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script th:src="@{/js/bootstrap-tagsinput.js}"></script>
-    <script th:src="@{/js/bootstrap-tagsinput-angular.js}"></script>
 
 </head>
 <body>
@@ -36,12 +35,12 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <!--if signed out-->
-                        <li><a href="/user/login">Sign In</a></li>
-                        <li><a href="/user/register">Register</a></li>
+                        <li sec:authorize="!isAuthenticated()"><a href="/user/login">Sign In</a></li>
+                        <li sec:authorize="!isAuthenticated()"><a href="/user/register">Register</a></li>
                         <!--if signed in-->
-                        <li><a href="">Your Profile</a></li>
-                        <li><a href="/newpost">New Post</a></li>
-                        <li><a href="/logout">Sign Out</a></li>
+                        <li sec:authorize="isAuthenticated()"><a th:href="@{'/user/'+${#authentication.name}}">Your Profile</a></li>
+                        <li sec:authorize="isAuthenticated()"><a href="/newpost">New Post</a></li>
+                        <li sec:authorize="isAuthenticated()"><a href="/user/logout">Sign Out</a></li>
                     </ul>
                 </div>
             </div>

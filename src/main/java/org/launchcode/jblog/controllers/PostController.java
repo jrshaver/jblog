@@ -1,7 +1,9 @@
 package org.launchcode.jblog.controllers;
 
 import org.launchcode.jblog.models.Post;
-import org.launchcode.jblog.dao.PostDao;
+import org.launchcode.jblog.models.Tag;
+import org.launchcode.jblog.service.PostService;
+import org.launchcode.jblog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,25 +14,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
-import java.util.Date;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 public class PostController {
 
     @Autowired
-    private PostDao postDao;
+    private PostService postService;
 
     @RequestMapping(value = "")
     public String index(Model model) {
         //display index page with most recent posts, popular tags, and search function
         model.addAttribute("title", "Jblog");
+        model.addAttribute("posts", postService.findAll());
 
         return "index";
     }
 
     @RequestMapping(value = "{postId}")
     public String viewPost(Model model, @PathVariable int postId) {
-        Post thisPost = postDao.findOne(postId);
+        Post thisPost = postService.findById(postId);
         model.addAttribute("title", thisPost.getTitle());
         model.addAttribute(thisPost);
         return "post/view";
@@ -61,7 +67,7 @@ public class PostController {
     }
 
     @RequestMapping(value = "newpost", method = RequestMethod.POST)
-    public String newPostProcess(Model model, @ModelAttribute("post") @Valid Post newPost, Errors errors) {
+    public String newPostProcess(Principal principal, Model model, @ModelAttribute(name = "post") @Valid Post newPost, Errors errors) {
         //validate and add post
 
         if (errors.hasErrors()) {
@@ -72,8 +78,8 @@ public class PostController {
         }
 
         else {
-            newPost.setDatePosted(new Date());
-            postDao.save(newPost);
+
+            postService.save(principal, newPost);
 
             return "redirect:/" + newPost.getId();
         }

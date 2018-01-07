@@ -17,8 +17,8 @@
                 <th>Date Joined</th>
             </tr>
             <tr th:each="user : ${users}">
-                <td><a th:href="@{'/user/' + ${user.getUserId()}}" th:text="${user.getUsername()}"></a></td>
-                <td>Get Number of Posts</td>
+                <td><a th:href="@{'/user/' + ${user.getUsername()}}" th:text="${user.getUsername()}"></a></td>
+                <td th:text="${user.getPosts().size()}"></td>
                 <td th:text="${user.getDateJoined()}"></td>
             </tr>
         </table>

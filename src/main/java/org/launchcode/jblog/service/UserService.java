@@ -5,8 +5,9 @@ import org.launchcode.jblog.models.User;
 import java.util.List;
 
 public interface UserService {
-    public void addUser(User user);
-    public User findByUsername(String username);
-    public User findById(int id);
-    public List<User> findAll();
+    void addUser(User user);
+    User findByUsername(String username);
+    User findByEmail(String email);
+    User findById(int id);
+    List<User> findAll();
 }

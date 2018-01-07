@@ -1,6 +1,7 @@
 package org.launchcode.jblog.models;
 
 import org.hibernate.validator.constraints.Email;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -37,31 +38,35 @@ public class User {
     @Transient
     private String verifyPassword;
 
-    @NotNull
-    private boolean enabled;
-
     @OneToMany
     @JoinColumn(name = "user_id")
     private List<Post> posts = new ArrayList<>();
 
-    @ManyToOne
-    private Role role;
+    @ManyToMany
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private List<Role> roles = new ArrayList<>();
 
     public User() {
     }
 
-    public User(String username, String email, String password, Role role) {
+    public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.role = role;
     }
 
     private void checkPassword() {
 
-//        if (password!=null && verifyPassword!=null && !(BCrypt.checkpw(verifyPassword, password))) {
-//            verifyPassword=null;
-//        }
+        if (password!=null && verifyPassword!=null &&
+                !(verifyPassword.equals(password))) {
+            verifyPassword=null;
+        }
+
+        else {
+            password = BCrypt.hashpw(password, BCrypt.gensalt());
+        }
     }
 
     private Date dateJoined;
@@ -97,7 +102,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-        checkPassword();
     }
 
     public String getVerifyPassword() {
@@ -117,11 +121,12 @@ public class User {
         return posts;
     }
 
-    public Role getRole() {
-        return role;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
+
 }

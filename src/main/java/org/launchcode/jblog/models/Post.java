@@ -16,7 +16,7 @@ public class Post {
     private int id;
 
     @NotNull
-    @Size(min=3, max=15, message = "Post's name must be between 3-15 characters long.")
+    @Size(min=3, max=15, message = "Post's name must be between 3-25 characters long.")
     @Column(name = "title")
     private String title;
 
@@ -40,15 +40,18 @@ public class Post {
     @JoinTable(name = "posts_tags",
             joinColumns = @JoinColumn(name = "posts_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
-    private Collection<Tag> tags = new ArrayList<>();
+    private List<Tag> tags = new ArrayList<>();
+
+    @Transient
+    private String tagsString;
 
     @ManyToOne
     private User user;
 
-    public Post(String title, String body, List<Tag> tags) {
+    public Post(String title, String body, User user) {
         this.title = title;
         this.body = body;
-        this.tags = tags;
+        this.user = user;
     }
 
     public Post() {
@@ -78,7 +81,23 @@ public class Post {
         return tags;
     }
 
-    public void setTags(Collection<Tag> tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getTagsString() {
+        return tagsString;
+    }
+
+    public void setTagsString(String tagsString) {
+        this.tagsString = tagsString;
     }
 }

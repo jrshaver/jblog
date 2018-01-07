@@ -257,7 +257,7 @@
      * Returns the items added as tags
      */
     items: function() {
-      return this.itemsArray;
+      return this.itemsArray
     },
 
     /**
@@ -672,6 +672,8 @@
 
       return found;
   }
+
+
 
   /**
    * Initialize tagsinput behaviour on inputs and selects which have

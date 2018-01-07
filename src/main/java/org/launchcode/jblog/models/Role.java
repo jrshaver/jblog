@@ -12,29 +12,28 @@ public class Role {
     @GeneratedValue
     private int id;
 
-    private String role = "Member";
+    private String name;
 
-    @OneToMany
-    @JoinColumn(name = "role_id")
-    private Collection<User> users = new ArrayList<>();;
+    @ManyToMany(mappedBy = "roles")
+    private Collection<User> users = new ArrayList<>();
 
     public Role() {
     }
 
-    public Role(String role) {
-        this.role = role;
+    public Role(String name) {
+        this.name = name;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getRole() {
-        return role;
+    public String getName() {
+        return name;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Collection<User> getUsers() {
@@ -45,10 +44,4 @@ public class Role {
         this.users = users;
     }
 
-    @Override
-    public String toString() {
-        return "Role{" +
-                ", role='" + role + '\'' +
-                '}';
-    }
 }
