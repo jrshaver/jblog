@@ -141,7 +141,6 @@ public class PostController {
         if (errors.hasErrors()) {
             model.addAttribute("title", "New Post");
             model.addAttribute(newPost);
-
             return "post/new";
         }
 
@@ -149,7 +148,6 @@ public class PostController {
 
             postService.save(principal, newPost);
             redirectAttributes.addFlashAttribute("message", "Blog posted!");
-
             return "redirect:/post/" + newPost.getId();
         }
     }
