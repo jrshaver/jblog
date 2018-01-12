@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments::head"></head>
 <body>
 
@@ -8,21 +8,48 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-8">
+            <h4 align="center" sec:authorize="isAuthenticated()" th:text="'Welcome, ' + ${#authentication.name} + '!'"></h4>
 
-            <div class="post">
-                <h1><a href="">Blog Post Title</a></h1>
-                <p class="lead">by <a href="">Author</a></p>
-            </div>
-            <hr />
+            <h4 th:if="${message!=null}" th:text="${message}" class="flash-message"></h4>
+
+            <ul th:each="post : ${allPosts}" class="all-posts">
+                <li>
+                    <div class="post">
+                        <h1><a th:href="@{'/post/' + ${post.getId()}}" th:text="${post.getTitle()}"></a></h1>
+                        <p class="lead">by <a th:href="@{'/user/' + ${post.getUser().getUsername()}}" th:text="${post.getUser().getUsername()}"></a></p>
+                        <p th:text="${post.getBody()}"></p>
+                    </div>
+                </li>
+                <hr />
+            </ul>
+
+            <ul class="pages">Page:
+                <li th:if="${allPosts.getNumber() - 2 >= 0}">
+                    <a th:href="@{/(page=${allPosts.getNumber() - 1})}" th:text="${allPosts.getNumber() - 1}"></a>
+                </li>
+                <li th:if="${allPosts.getNumber() - 1 >= 0}">
+                    <a th:href="@{/(page=${allPosts.getNumber()})}" th:text="${allPosts.getNumber()}"></a>
+                </li>
+                <li class="active" th:text="${allPosts.getNumber() + 1}">
+                    <!--<a th:text="${allPosts.getNumber() + 1}"></a>-->
+                </li>
+                <li th:if="${allPosts.getNumber() + 1 &lt; allPosts.getTotalPages()}">
+                    <a th:href="@{/(page=${allPosts.getNumber() + 2})}" th:text="${allPosts.getNumber() + 2}"></a>
+                </li>
+                <li th:if="${allPosts.getNumber() + 2 &lt; allPosts.getTotalPages()}">
+                    <a th:href="@{/(page=${allPosts.getNumber() + 3})}" th:text="${allPosts.getNumber() + 3}"></a>
+                </li>
+            </ul>
 
         </div>
         <div class="col-sm-4">
             <h3>Search</h3>
             <hr />
-            <form class="form-group" action="search">
+            <form class="form-group" method="POST" action="search">
                 <div class="row">
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" placeholder="Search" />
+                        <input type="text" class="form-control" placeholder="Search"
+                               id="searchTerm" name="searchTerm" />
                     </div>
                     <div class="col-sm-4">
                         <button type="submit" class="btn btn-default">Submit</button>
@@ -33,7 +60,9 @@
             <hr />
             <h3>Popular Tags</h3>
             <hr />
-            list of popular tags here: top 5
+            <ul th:each="tag : ${topTags}">
+                <li><a th:href="@{'/tags/' + ${tag.getId()}}" th:text="${tag.getName()}"></a></li>
+            </ul>
         </div>
     </div>
 </div>

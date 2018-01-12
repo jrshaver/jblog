@@ -10,8 +10,8 @@
     <h1 th:text="${title}"></h1>
     <hr />
 
-    <ul th:each="post : ${posts}">
-        <li>Post name:link to post</li>
+    <ul th:each="post : ${tag.getPosts()}">
+        <li><a th:href="@{'/post/' + ${post.getId()}}" th:text="${post.getTitle()}"></a></li>
     </ul>
 </div>
 

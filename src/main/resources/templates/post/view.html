@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments::head"></head>
 <body>
 
@@ -8,15 +8,27 @@
 
 <div class="container">
 
+    <h4 th:if="${message!=null}" th:text="${message}" class="flash-message"></h4>
+
+    <div sec:authorize="isAuthenticated()" th:if="${post.getUser().getUsername()} == ${#authentication.name}" class="well">
+        <form>
+            <button type="submit" th:formaction="@{'/post/edit/' + ${post.getId()}}" class="btn btn-default">Edit Post</button>
+            <button type="submit" formmethod="POST" th:formaction="@{'/post/delete/' + ${post.getId()}}" class="btn btn-default">Delete Post</button>
+        </form>
+    </div>
+
     <div class="post">
         <h1 th:text="${post.getTitle()}">Blog Post Title</h1>
         <p class="lead">by <a th:href="@{'/user/' + ${post.getUser().getUsername()}}" th:text="${post.getUser().getUsername()}">Author</a></p>
         <p th:text="${post.getBody()}"></p>
         <hr />
-        <ul class="tag-list" th:each="tag : ${post.getTags()}">
-            <li th:text="${tag.getName()}"></li>
-        </ul>
-        <p th:text="'Posted on ' + ${post.getDatePosted()}"></p>
+        <span th:if="${post.getTags()} and ${post.getTags().size() &gt; 0}">
+            Tags:
+            <ul class="tag-list" th:each="tag : ${post.getTags()}">
+                <li><a th:href="@{'/tags/' + ${tag.getId()}}" th:text="${tag.getName()}"></a></li>
+            </ul>
+        </span>
+        <p th:text="'Posted on: ' + ${post.getDatePosted()}"></p>
     </div>
 
 </div>

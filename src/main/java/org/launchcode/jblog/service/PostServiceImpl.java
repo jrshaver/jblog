@@ -7,6 +7,9 @@ import org.launchcode.jblog.models.Post;
 import org.launchcode.jblog.models.Tag;
 import org.launchcode.jblog.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -14,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -29,12 +35,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> findAll() {
-        return this.postDao.findAll();
+        return postDao.findAll();
     }
 
     @Override
     public Post findById(int id) {
-        return this.postDao.findOne(id);
+        return postDao.findOne(id);
     }
 
     @Override
@@ -56,7 +62,41 @@ public class PostServiceImpl implements PostService {
         }
         post.setTags(tags);
 
-        return this.postDao.save(post);
+        return postDao.save(post);
+    }
+
+    @Override
+    public Page<Post> getPage(int pageNumber) {
+        PageRequest pageRequest = new PageRequest(pageNumber - 1, 4, Sort.Direction.DESC, "id");
+        return postDao.findAll(pageRequest);
+    }
+
+    @Override
+    public void delete(int id) {
+        postDao.delete(id);
+    }
+
+    @Override
+    public List<Post> findBySearchTerm(String searchTerm) {
+
+        List<Post> searchResults = new ArrayList<>();
+        //Search title
+        if (!(postDao.findByTitleContaining(searchTerm).isEmpty())) {
+            searchResults.addAll(postDao.findByTitleContaining(searchTerm));
+        }
+
+        //Search body
+        else if (!(postDao.findByBodyContaining(searchTerm).isEmpty())) {
+            searchResults.addAll(postDao.findByBodyContaining(searchTerm));
+        }
+
+        else if (!(tagDao.findByNameContaining(searchTerm).isEmpty())) {
+            for (Tag tag : tagDao.findByNameContaining(searchTerm)) {
+                searchResults.addAll(tag.getPosts());
+            }
+        }
+
+        return searchResults;
     }
 
 }

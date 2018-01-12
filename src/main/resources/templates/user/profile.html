@@ -29,7 +29,7 @@
                 <th>Posts:</th>
                 <td>
                     <ul th:each="post : ${user.getPosts()}">
-                        <li><a th:href="@{'/' + ${post.getId()}}" th:text="${post.getTitle()}"></a></li>
+                        <li><a th:href="@{'/post/' + ${post.getId()}}" th:text="${post.getTitle()}"></a></li>
                     </ul>
                 </td>
             </tr>

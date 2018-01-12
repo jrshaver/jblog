@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments::head"></head>
+<body>
+
+<nav th:replace="fragments::nav"></nav>
+
+<div class="container">
+
+    <h1 th:text="${title}"></h1>
+    <hr />
+
+    <ul th:each="result : ${searchResults}">
+        <li>
+            <div class="post">
+                <h1><a th:href="@{'/post/' + ${result.getId()}}" th:text="${result.getTitle()}"></a></h1>
+                <p class="lead">by <a th:href="@{'/user/' + ${result.getUser().getUsername()}}" th:text="${result.getUser().getUsername()}"></a></p>
+                <p th:text="${result.getBody()}"></p>
+                <span th:if="${result.getTags()} and ${result.getTags().size() &gt; 0}">
+                    Tags:
+                    <ul class="tag-list" th:each="tag : ${result.getTags()}">
+                        <li><a th:href="@{'/tags/' + ${tag.getId()}}" th:text="${tag.getName()}"></a></li>
+                    </ul>
+                </span>
+            </div>
+        </li>
+        <hr />
+    </ul>
+</div>
+
+</body>
+</html>

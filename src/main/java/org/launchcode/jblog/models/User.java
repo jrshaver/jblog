@@ -21,7 +21,6 @@ public class User {
 
     @Size(min = 5, max = 15)
     @NotNull
-    @Pattern(regexp = "^[A-Za-z]*$", message = "Username must only contain alphabetic characters.")
     @Column(name = "username")
     private String username;
 

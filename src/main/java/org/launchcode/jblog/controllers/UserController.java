@@ -28,6 +28,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.ServletException;
@@ -57,8 +58,8 @@ public class UserController {
         return "user/index";
     }
 
-    @RequestMapping(value = "{username}")
-    public String userProfile(Model model, @PathVariable String username) {
+    @RequestMapping(value = "{username}", method = RequestMethod.GET)
+    public String userProfileDisplay(Model model, @PathVariable String username) {
         //display a users profile with user info and posts
         User user = userService.findByUsername(username);
         model.addAttribute("title", user.getUsername());
