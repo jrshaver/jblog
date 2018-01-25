@@ -22,17 +22,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/", "/post/*","/user","/user/**","/tags","/tags/*","/css/**","/js/**").permitAll()
-                    .anyRequest().authenticated()
-                    .and()
+                .antMatchers("/", "/post/*","/user","/user/**","/tags","/tags/*","/css/**","/js/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
                 .formLogin()
-                    .loginPage("/user/login")
-                    .usernameParameter("username")
-                    .passwordParameter("password")
-                    .defaultSuccessUrl("/")
-                    .loginProcessingUrl("/user/login")
-                    .failureUrl("/user/login?error=error")
-                    .permitAll();
+                .loginPage("/user/login")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/")
+                .loginProcessingUrl("/user/login")
+                .failureUrl("/user/login?error=error")
+                .permitAll();
 
     }
 

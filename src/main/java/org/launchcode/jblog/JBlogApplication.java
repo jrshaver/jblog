@@ -2,12 +2,18 @@ package org.launchcode.jblog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class JBlogApplication {
+public class JBlogApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(JBlogApplication.class, args);
 	}
+
+//	@Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+//	    return application.sources(JBlogApplication.class);
+//    }
 }
 

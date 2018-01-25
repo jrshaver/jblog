@@ -29,9 +29,14 @@ public class TagServiceImpl implements TagService {
         List<Tag> allTags = tagDao.findAll();
         TagComparator tagComparator = new TagComparator();
         allTags.sort(tagComparator);
-        List<Tag> topTags = allTags.subList(0,4);
-        //return first 5
-        return topTags;
+        try {
+            //return first 5
+            List<Tag> topTags = allTags.subList(0, 4);
+            return topTags;
+        }
+        catch (IndexOutOfBoundsException ex) {
+            return allTags;
+        }
 
     }
 }

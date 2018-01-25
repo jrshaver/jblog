@@ -10,6 +10,8 @@
     <h1 th:text="${title}"></h1>
     <hr />
 
+    <p th:unless="${tags} and ${tags.size()}">No tags yet!</p>
+
     <ul class="tag-pool" th:each="tag : ${tags}">
         <li><a th:text="${tag.getName()}" th:href="@{'/tags/' + ${tag.getId()}}"></a></li>
     </ul>
