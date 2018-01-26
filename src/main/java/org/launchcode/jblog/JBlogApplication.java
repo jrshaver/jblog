@@ -2,6 +2,7 @@ package org.launchcode.jblog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 @SpringBootApplication
@@ -11,9 +12,9 @@ public class JBlogApplication extends SpringBootServletInitializer {
 		SpringApplication.run(JBlogApplication.class, args);
 	}
 
-//	@Override
-//    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-//	    return application.sources(JBlogApplication.class);
-//    }
+	@Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+	    return application.sources(JBlogApplication.class);
+    }
 }
 

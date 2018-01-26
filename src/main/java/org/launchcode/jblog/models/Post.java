@@ -4,7 +4,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @Entity(name = "Post")
 @Table(name = "posts")
@@ -22,6 +25,8 @@ public class Post {
 
     @NotNull(message = "Please enter a post.")
     @Column(name = "body")
+    @Lob
+    @Size(max=2000, message = "Post must be less than 2000 characters in length.")
     private String body;
 
     @Column(name = "date_posted")

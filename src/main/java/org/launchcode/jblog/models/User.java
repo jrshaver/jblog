@@ -1,7 +1,6 @@
 package org.launchcode.jblog.models;
 
 import org.hibernate.validator.constraints.Email;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -64,9 +63,6 @@ public class User {
             verifyPassword=null;
         }
 
-        else {
-            password = BCrypt.hashpw(password, BCrypt.gensalt());
-        }
     }
 
     private Date dateJoined;

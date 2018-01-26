@@ -3,3 +3,5 @@
 <p>Implements MVC architecture, Spring Security, Hibernate with MySQL, Thymeleaf, Bootstrap.</p>
 <p>Users can register for an account, log in and log out, make new posts, edit their posts, and delete theirs posts.</p>
 <p>Users can add and delete tags from their posts.  Users can also search all the posts in the database.</p>
+
+<p>Currently deployed with Amazon Web Servive's RDS and EBS at: <a href="http://jblog.us-east-2.elasticbeanstalk.com/"></a></p>
