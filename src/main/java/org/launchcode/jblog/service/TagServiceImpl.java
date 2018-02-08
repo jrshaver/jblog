@@ -15,6 +15,10 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> findAll() {
+        //clean out empty tags
+        for (Tag tag : tagDao.findAll()) {
+            if (tag.getPosts().isEmpty()) tagDao.delete(tag);
+        }
         return tagDao.findAll();
     }
 
@@ -25,6 +29,10 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> findTop5() {
+        //clean out empty tags
+        for (Tag tag : tagDao.findAll()) {
+            if (tag.getPosts().isEmpty()) tagDao.delete(tag);
+        }
         //sort by number of posts
         List<Tag> allTags = tagDao.findAll();
         TagComparator tagComparator = new TagComparator();
@@ -39,4 +47,10 @@ public class TagServiceImpl implements TagService {
         }
 
     }
+
+    @Override
+    public void delete(int id) {
+        tagDao.delete(id);
+    }
+
 }

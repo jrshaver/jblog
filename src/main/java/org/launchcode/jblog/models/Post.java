@@ -26,7 +26,7 @@ public class Post {
     @NotNull(message = "Please enter a post.")
     @Column(name = "body")
     @Lob
-    @Size(max=2000, message = "Post must be less than 2000 characters in length.")
+    @Size(max=6000, message = "Post must be less than 6000 characters in length.")
     private String body;
 
     @Column(name = "date_posted")
@@ -105,4 +105,5 @@ public class Post {
     public void setTagsString(String tagsString) {
         this.tagsString = tagsString;
     }
+
 }

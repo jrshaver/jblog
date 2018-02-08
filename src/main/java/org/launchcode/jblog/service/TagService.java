@@ -9,4 +9,5 @@ public interface TagService {
     List<Tag> findAll();
     Tag findById(int id);
     List<Tag> findTop5();
+    void delete(int id);
 }

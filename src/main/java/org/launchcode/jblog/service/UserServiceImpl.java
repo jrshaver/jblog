@@ -5,6 +5,7 @@ import org.launchcode.jblog.dao.UserDao;
 import org.launchcode.jblog.models.Role;
 import org.launchcode.jblog.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     @Override
     public void addUser(User user) {

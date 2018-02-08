@@ -3,8 +3,11 @@ package org.launchcode.jblog.controllers;
 import org.launchcode.jblog.models.User;
 import org.launchcode.jblog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +27,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @RequestMapping(value = "")
     public String index(Model model) {
@@ -53,7 +59,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public String signUpProcess(Model model, @ModelAttribute @Valid User newUser, Errors errors) {
+    public String signUpProcess(Model model, @ModelAttribute @Valid User newUser, Errors errors,
+                                HttpServletRequest request) {
 
         //if validation fails
         if (errors.hasErrors()) {
@@ -83,7 +90,14 @@ public class UserController {
 
         //log user in
 
-        return "redirect:/user/login";
+        UsernamePasswordAuthenticationToken token =
+                new UsernamePasswordAuthenticationToken(newUser.getUsername(), newUser.getVerifyPassword());
+        request.getSession();
+        token.setDetails(new WebAuthenticationDetails(request));
+        Authentication auth = authenticationManager.authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        return "redirect:/";
 
     }
 

@@ -18,7 +18,7 @@ public class ErrorController {
 
     @ExceptionHandler
     public String handleGlobalEx(RedirectAttributes redirectAttributes,
-                                 RuntimeException ex) {
+                                 Exception ex) {
 
         redirectAttributes.addFlashAttribute("message", "Page Not Found.");
         return "redirect:/";

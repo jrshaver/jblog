@@ -10,22 +10,66 @@
     <h1 th:text="${title}"></h1>
     <hr />
 
-    <ul th:each="result : ${searchResults}">
-        <li>
-            <div class="post">
-                <h1><a th:href="@{'/post/' + ${result.getId()}}" th:text="${result.getTitle()}"></a></h1>
-                <p class="lead">by <a th:href="@{'/user/' + ${result.getUser().getUsername()}}" th:text="${result.getUser().getUsername()}"></a></p>
-                <p th:text="${result.getBody()}"></p>
-                <span th:if="${result.getTags()} and ${result.getTags().size() &gt; 0}">
-                    Tags:
-                    <ul class="tag-list" th:each="tag : ${result.getTags()}">
-                        <li><a th:href="@{'/tags/' + ${tag.getId()}}" th:text="${tag.getName()}"></a></li>
-                    </ul>
-                </span>
+    <div class="well">
+        <form class="form-group" method="POST" id="search-form" action="/search/filter">
+            <div class="row">
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Search"
+                           id="searchTerm" name="searchTerm" required="required" th:value="${searchTerm}" />
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </div>
             </div>
-        </li>
-        <hr />
-    </ul>
+
+            <div id="search-options">
+                <span th:if="${searchResults} and ${searchResults.size()}">
+                    <span th:text="${searchResults.size()}"></span>
+                    <span th:if="${searchResults.size() == 1}">result | </span>
+                    <span th:unless="${searchResults.size() == 1}">results | </span>
+                </span>
+
+                <a href="#filters" data-toggle="collapse" class="options">
+                    Advanced Options <span class="caret"></span></a>
+
+                <div id="filters" class="collapse">
+                    <h5>Filter by:</h5>
+                    <div class="radio">
+                        <label class="radio-inline"><input type="radio" name="filter" value="all" checked="checked" />All</label>
+                        <label class="radio-inline"><input type="radio" name="filter" value="title" />Title</label>
+                        <label class="radio-inline"><input type="radio" name="filter" value="body" />Body</label>
+                        <label class="radio-inline"><input type="radio" name="filter" value="tag" />Tag</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+        </div>
+
+
+    <table th:if="${searchResults} and ${searchResults.size()}" class="search-results">
+        <tr>
+            <th>Title
+                <span class="glyphicon glyphicon-chevron-up"></span>
+                <span class="glyphicon glyphicon-chevron-down"></span>
+            </th>
+            <th>Author
+                <span class="glyphicon glyphicon-chevron-up"></span>
+                <span class="glyphicon glyphicon-chevron-down"></span>
+            </th>
+            <th>Date Posted
+                <span class="glyphicon glyphicon-chevron-up"></span>
+                <span class="glyphicon glyphicon-chevron-down"></span>
+            </th>
+        </tr>
+        <tr th:each="result : ${searchResults}">
+            <td><a th:href="@{'/post/' + ${result.getId()}}" th:text="${result.getTitle()}" class="post-title"></a></td>
+            <td class="post-user"><a th:href="@{'/user/' + ${result.getUser().getUsername()}}" th:text="${result.getUser().getUsername()}"></a></td>
+            <td class="post-date" th:text="${result.getDatePosted()}"></td>
+        </tr>
+    </table>
+
+    <p th:unless="${searchResults} and ${searchResults.size()}">No results were found.</p>
+
 </div>
 
 </body>

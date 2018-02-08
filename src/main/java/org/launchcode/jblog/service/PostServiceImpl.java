@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -52,6 +49,8 @@ public class PostServiceImpl implements PostService {
         List<String> tagsStrings = Arrays.asList(post.getTagsString().split(","));
         List<Tag> tags = new ArrayList<>();
         for (String stringTag : tagsStrings) {
+            //if tag is an empty string, do not add to db
+            if (stringTag.isEmpty()) break;
             //if tag doesn't already exists, add tag to db
             if (!(tagDao.findAll().contains(tagDao.findByName(stringTag)))) {
                 Tag tag = new Tag();
@@ -77,24 +76,50 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> findBySearchTerm(String searchTerm) {
+    public List<Post> searchBySearchTerm(String searchTerm) {
 
         List<Post> searchResults = new ArrayList<>();
-        //Search title
+        //Search titles
         if (!(postDao.findByTitleContaining(searchTerm).isEmpty())) {
             searchResults.addAll(postDao.findByTitleContaining(searchTerm));
         }
 
-        //Search body
+        //Search bodies
         else if (!(postDao.findByBodyContaining(searchTerm).isEmpty())) {
             searchResults.addAll(postDao.findByBodyContaining(searchTerm));
         }
 
+        //Search tags
         else if (!(tagDao.findByNameContaining(searchTerm).isEmpty())) {
             for (Tag tag : tagDao.findByNameContaining(searchTerm)) {
                 searchResults.addAll(tag.getPosts());
             }
         }
+
+        return searchResults;
+    }
+
+    @Override
+    public List<Post> searchByFilter(String filter, String searchTerm) {
+
+        List<Post> searchResults = new ArrayList<>();
+        switch (filter) {
+            case "all":
+                searchResults = searchBySearchTerm(searchTerm);
+                break;
+            case "title":
+                searchResults = postDao.findByTitleContaining(searchTerm);
+                break;
+            case "body":
+                searchResults = postDao.findByBodyContaining(searchTerm);
+                break;
+            case "tag":
+                for (Tag tag : tagDao.findByNameContaining(searchTerm)) {
+                    searchResults.addAll(tag.getPosts());
+                }
+                break;
+        }
+
 
         return searchResults;
     }
