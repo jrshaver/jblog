@@ -4,16 +4,38 @@ $(document).on("click", ".options", function() {
 });
 
 //sorts search
-//function sortByTitle() {
-    var titlesA = document.getElementsByClassName("post-title");
-    let titles = [];
-    for (title of titlesA) {
-        titles.push(title.textContent);
+function sortBy(header, order='asc') {
+    //sorting function
+    function compare(a, b) {
+        const x = a[header].toLowerCase();
+        const y = b[header].toLowerCase();
+
+        let comparison = 0;
+        if (x > y) {
+            comparison = 1;
+        } else if (x < y) {
+            comparison = -1;
+        }
+        return order == 'desc' ? (comparison * -1) : comparison;
     }
-//    for (let i=0; i < titles.length-1; i++) {
-//        if (titles[i].innerHTML.toLowerCase() > title[i+1].innerHTML.toLowerCase()) {
-//            let temp = titles[i];
-//            titles[i] = titles[i+1];
-//            titles[i+1] = titles;
-//        }
-//    }
+
+    //Create and fill a list of TR's / search results
+    let posts = [];
+    for (let post of document.getElementsByClassName("result")) {
+        post = {
+            title: post.getElementsByClassName("post-title")[0].innerHTML,
+            author: post.getElementsByClassName("post-user")[0].innerHTML,
+            date: post.getElementsByClassName("post-date")[0].innerHTML
+        };
+        posts.push(post);
+    }
+
+    //sort and replace table data
+    posts.sort(compare);
+    for (let i = 0; i < posts.length; i++) {
+
+        document.getElementsByClassName("post-title")[i].innerHTML = posts[i].title;;
+        document.getElementsByClassName("post-user")[i].innerHTML = posts[i].author;
+        document.getElementsByClassName("post-date")[i].innerHTML = posts[i].date;
+    }
+}

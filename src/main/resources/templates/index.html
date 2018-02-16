@@ -17,7 +17,8 @@
                     <div class="post">
                         <h1><a th:href="@{'/post/' + ${post.getId()}}" th:text="${post.getTitle()}"></a></h1>
                         <p class="lead">by <a th:href="@{'/user/' + ${post.getUser().getUsername()}}" th:text="${post.getUser().getUsername()}"></a></p>
-                        <p th:utext="${#strings.unescapeJava(#strings.replace(#strings.escapeJava(post.getBody()),'\n','&lt;br /&gt;'))}"></p>
+                        <p th:utext="${#strings.unescapeJava(#strings.replace(#strings.escapeXml(#strings.escapeJava(
+        post.getBody())),'\n','&lt;br /&gt;'))}"></p>
                     </div>
                 </li>
                 <hr />

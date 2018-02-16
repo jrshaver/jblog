@@ -23,13 +23,13 @@ body {
     border-bottom: 1px solid #e4e4e4;
 }
 
-.search-results {
+#search-results {
     margin: 30px auto;
     border: 1px solid #e4e4e4;
     width: 100%;
 }
 
-.search-results th, .search-results td {
+#search-results th, #search-results td {
     width: 33%;
     text-align: center;
     padding: 15px;
@@ -37,7 +37,7 @@ body {
     border-bottom: 1px solid #e4e4e4;
 }
 
-.search-results th span {
+#search-results th span {
     font-size: 10px;
 }
 

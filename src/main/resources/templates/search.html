@@ -46,26 +46,46 @@
         </div>
 
 
-    <table th:if="${searchResults} and ${searchResults.size()}" class="search-results">
+    <table th:if="${searchResults} and ${searchResults.size()}" id="search-results">
         <tr>
             <th>Title
-                <span class="glyphicon glyphicon-chevron-up"></span>
-                <span class="glyphicon glyphicon-chevron-down"></span>
+                <a href="#" onclick="sortBy('title','asc')"><span class="glyphicon glyphicon-chevron-up"></span></a>
+                <a href="#" onclick="sortBy('title','desc')"><span class="glyphicon glyphicon-chevron-down"></span></a>
             </th>
             <th>Author
-                <span class="glyphicon glyphicon-chevron-up"></span>
-                <span class="glyphicon glyphicon-chevron-down"></span>
+                <a href="#" onclick="sortBy('author','asc')"><span class="glyphicon glyphicon-chevron-up"></span></a>
+                <a href="#" onclick="sortBy('author','desc')"><span class="glyphicon glyphicon-chevron-down"></span></a>
             </th>
             <th>Date Posted
-                <span class="glyphicon glyphicon-chevron-up"></span>
-                <span class="glyphicon glyphicon-chevron-down"></span>
+                <a href="#" onclick="sortBy('date','asc')"><span class="glyphicon glyphicon-chevron-up"></span></a>
+                <a href="#" onclick="sortBy('date','desc')"><span class="glyphicon glyphicon-chevron-down"></span></a>
             </th>
         </tr>
-        <tr th:each="result : ${searchResults}">
-            <td><a th:href="@{'/post/' + ${result.getId()}}" th:text="${result.getTitle()}" class="post-title"></a></td>
-            <td class="post-user"><a th:href="@{'/user/' + ${result.getUser().getUsername()}}" th:text="${result.getUser().getUsername()}"></a></td>
-            <td class="post-date" th:text="${result.getDatePosted()}"></td>
+        <tr th:each="result : ${searchResults}" class="result">
+            <td><a th:href="@{'/post/' + ${result.getId()}}" th:text="${result.getTitle()}" class="post-title">title</a></td>
+            <td><a th:href="@{'/user/' + ${result.getUser().getUsername()}}" th:text="${result.getUser().getUsername()}" class="post-user">user</a></td>
+            <td class="post-date" th:text="${result.getDatePosted()}">date</td>
         </tr>
+        <!--<tr th:each="result : ${searchResults}" class="result">-->
+            <!--<td><a href="/" class="post-title">0000</a></td>-->
+            <!--<td><a href="/" class="post-user">some userstest</a></td>-->
+            <!--<td class="post-date" th:text="${result.getDatePosted()}"></td>-->
+        <!--</tr>-->
+        <!--<tr th:each="result : ${searchResults}" class="result">-->
+            <!--<td><a href="/" class="post-title">Test2 title</a></td>-->
+            <!--<td><a href="/" class="post-user">some user</a></td>-->
+            <!--<td class="post-date" th:text="${result.getDatePosted()}">a date</td>-->
+        <!--</tr>-->
+        <!--<tr th:each="result : ${searchResults}" class="result">-->
+            <!--<td><a href="/" class="post-title">3Test3 title</a></td>-->
+            <!--<td><a href="/" class="post-user">some user</a></td>-->
+            <!--<td class="post-date" th:text="${result.getDatePosted()}">c date</td>-->
+        <!--</tr>-->
+        <!--<tr th:each="result : ${searchResults}" class="result">-->
+            <!--<td><a href="/" class="post-title">aTest2 title</a></td>-->
+            <!--<td><a href="/" class="post-user">some user</a></td>-->
+            <!--<td class="post-date" th:text="${result.getDatePosted()}">a date</td>-->
+        <!--</tr>-->
     </table>
 
     <p th:unless="${searchResults} and ${searchResults.size()}">No results were found.</p>
