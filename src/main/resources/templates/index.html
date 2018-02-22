@@ -32,7 +32,6 @@
                     <a th:href="@{/(page=${allPosts.getNumber()})}" th:text="${allPosts.getNumber()}"></a>
                 </li>
                 <li class="active" th:text="${allPosts.getNumber() + 1}">
-                    <!--<a th:text="${allPosts.getNumber() + 1}"></a>-->
                 </li>
                 <li th:if="${allPosts.getNumber() + 1 &lt; allPosts.getTotalPages()}">
                     <a th:href="@{/(page=${allPosts.getNumber() + 2})}" th:text="${allPosts.getNumber() + 2}"></a>
